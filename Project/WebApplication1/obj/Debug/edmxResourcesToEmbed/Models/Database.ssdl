@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DreamsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Icon" Type="nvarchar" MaxLength="150" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Dream">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="1500" Nullable="false" />
+    <Property Name="Long" Type="float" Nullable="false" />
+    <Property Name="Lat" Type="float" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DreamAndCategory">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DreamID" Type="int" Nullable="false" />
+    <Property Name="CategoryID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DreamAndTag">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DreamID" Type="int" Nullable="false" />
+    <Property Name="TagID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Dream_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Dream" Type="Self.Dream" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Dream">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DreamAndCategory_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="1" />
+    <End Role="DreamAndCategory" Type="Self.DreamAndCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DreamAndCategory">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DreamAndCategory_Dream">
+    <End Role="Dream" Type="Self.Dream" Multiplicity="1" />
+    <End Role="DreamAndCategory" Type="Self.DreamAndCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Dream">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DreamAndCategory">
+        <PropertyRef Name="DreamID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DreamAndTag_Dream">
+    <End Role="Dream" Type="Self.Dream" Multiplicity="1" />
+    <End Role="DreamAndTag" Type="Self.DreamAndTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Dream">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DreamAndTag">
+        <PropertyRef Name="DreamID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DreamAndTag_Tag">
+    <End Role="Tag" Type="Self.Tag" Multiplicity="1" />
+    <End Role="DreamAndTag" Type="Self.DreamAndTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DreamAndTag">
+        <PropertyRef Name="TagID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DreamsModelStoreContainer">
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Dream" EntityType="Self.Dream" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DreamAndCategory" EntityType="Self.DreamAndCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DreamAndTag" EntityType="Self.DreamAndTag" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Dream_User" Association="Self.FK_Dream_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Dream" EntitySet="Dream" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DreamAndCategory_Category" Association="Self.FK_DreamAndCategory_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="DreamAndCategory" EntitySet="DreamAndCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DreamAndCategory_Dream" Association="Self.FK_DreamAndCategory_Dream">
+      <End Role="Dream" EntitySet="Dream" />
+      <End Role="DreamAndCategory" EntitySet="DreamAndCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DreamAndTag_Dream" Association="Self.FK_DreamAndTag_Dream">
+      <End Role="Dream" EntitySet="Dream" />
+      <End Role="DreamAndTag" EntitySet="DreamAndTag" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DreamAndTag_Tag" Association="Self.FK_DreamAndTag_Tag">
+      <End Role="Tag" EntitySet="Tag" />
+      <End Role="DreamAndTag" EntitySet="DreamAndTag" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
